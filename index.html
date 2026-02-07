@@ -3,1307 +3,629 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MedPredict AI Pro - Sistema Avançado de Análise Clínica</title>
+    <title>MedPredict AI Pro - Análise Clínica Avançada</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
-        :root {
-            --primary: #0f172a;
-            --accent: #06b6d4;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-        }
-        
-        * {
-            font-family: 'Inter', sans-serif;
-        }
-        
-        h1, h2, h3, .brand {
-            font-family: 'Space Grotesk', sans-serif;
-        }
-        
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .gradient-bg {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
-        }
-        
-        .neon-glow {
-            box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
-        }
-        
-        .pulse-ring {
-            animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
-        }
-        
-        @keyframes pulse-ring {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(6, 182, 212, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(6, 182, 212, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(6, 182, 212, 0); }
-        }
-        
-        .slide-in {
-            animation: slideIn 0.5s ease-out forwards;
-        }
-        
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .drag-active {
-            border-color: #06b6d4 !important;
-            background: rgba(6, 182, 212, 0.1) !important;
-        }
-        
-        .timeline-line {
-            position: absolute;
-            left: 20px;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: linear-gradient(to bottom, #06b6d4, transparent);
-        }
-        
-        .tab-active {
-            border-bottom: 2px solid #06b6d4;
-            color: #06b6d4;
-        }
-        
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        
-        ::-webkit-scrollbar-track {
-            background: #0f172a;
-        }
-        
-        ::-webkit-scrollbar-thumb {
-            background: #334155;
-            border-radius: 4px;
-        }
-        
-        ::-webkit-scrollbar-thumb:hover {
-            background: #06b6d4;
-        }
-        
-        .research-badge {
-            background: linear-gradient(135deg, #8b5cf6, #ec4899);
-        }
-        
-        .alternative-badge {
-            background: linear-gradient(135deg, #f59e0b, #ef4444);
-        }
+        body { font-family: 'Inter', sans-serif; background: #0f172a; color: #e2e8f0; }
+        h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; }
+        .glass { background: rgba(255,255,255,0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
+        .neon { box-shadow: 0 0 20px rgba(6,182,212,0.3); }
+        .hidden { display: none !important; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-slide { animation: slideIn 0.5s ease-out; }
+        .timeline-line { position: absolute; left: 20px; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, #06b6d4, transparent); }
     </style>
 </head>
-<body class="gradient-bg text-slate-200 min-h-screen overflow-x-hidden">
+<body class="min-h-screen p-4 md:p-8">
 
-    <!-- Sidebar -->
-    <nav class="fixed left-0 top-0 h-full w-64 glass-panel border-r border-slate-700 z-50 hidden md:flex flex-col">
-        <div class="p-6 border-b border-slate-700">
+    <div class="max-w-6xl mx-auto">
+        <!-- Header -->
+        <header class="flex justify-between items-center mb-8">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-cyan-500/20 flex items-center justify-center neon-glow">
-                    <i data-lucide="brain-circuit" class="w-6 h-6 text-cyan-400"></i>
+                <div class="w-12 h-12 rounded-xl bg-cyan-500/20 flex items-center justify-center neon">
+                    <i data-lucide="brain-circuit" class="w-7 h-7 text-cyan-400"></i>
                 </div>
                 <div>
-                    <h1 class="text-xl font-bold text-white">MedPredict</h1>
-                    <p class="text-xs text-cyan-400">AI Clinical Suite Pro</p>
+                    <h1 class="text-2xl font-bold text-white">MedPredict AI Pro</h1>
+                    <p class="text-xs text-cyan-400">Sistema de Análise Preditiva</p>
                 </div>
-            </div>
-        </div>
-        
-        <div class="flex-1 p-4 space-y-2">
-            <button onclick="showSection('dashboard')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 transition-all">
-                <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
-                <span>Dashboard</span>
-            </button>
-            
-            <button onclick="showSection('novo-caso')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:bg-slate-800/50 transition-all">
-                <i data-lucide="stethoscope" class="w-5 h-5"></i>
-                <span>Nova Análise</span>
-            </button>
-            
-            <button onclick="showSection('calculadoras')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:bg-slate-800/50 transition-all">
-                <i data-lucide="calculator" class="w-5 h-5"></i>
-                <span>Calculadoras</span>
-            </button>
-            
-            <button onclick="showSection('research')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:bg-slate-800/50 transition-all">
-                <i data-lucide="flask-conical" class="w-5 h-5"></i>
-                <span>Pesquisas Ativas</span>
-                <span class="ml-auto px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-400 text-xs">12</span>
-            </button>
-            
-            <button onclick="showSection('historico')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:bg-slate-800/50 transition-all">
-                <i data-lucide="history" class="w-5 h-5"></i>
-                <span>Histórico</span>
-            </button>
-        </div>
-        
-        <div class="p-4 border-t border-slate-700">
-            <div class="glass-panel p-3 rounded-lg bg-slate-800/50">
-                <div class="flex items-center gap-2 mb-2">
-                    <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
-                    <span class="text-xs text-emerald-400">Sistema Online</span>
-                </div>
-                <p class="text-xs text-slate-500">v2.4.1 - Modelo Neural Atualizado</p>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Main Content -->
-    <main class="md:ml-64 min-h-screen p-4 md:p-8">
-        
-        <!-- Header -->
-        <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-            <div>
-                <h2 class="text-3xl font-bold text-white mb-1">Análise Clínica Avançada</h2>
-                <p class="text-slate-400">Upload de prontuários, predição de desfechos e protocolos de tratamento</p>
-            </div>
-            <div class="flex items-center gap-3">
-                <button onclick="exportReport()" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-sm flex items-center gap-2 transition-colors">
-                    <i data-lucide="download" class="w-4 h-4"></i>
-                    Exportar PDF
-                </button>
-                <button onclick="showSection('novo-caso')" class="bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold px-6 py-2 rounded-lg transition-all flex items-center gap-2 neon-glow">
-                    <i data-lucide="plus" class="w-4 h-4"></i>
-                    Novo Caso
-                </button>
             </div>
         </header>
 
-        <!-- NOVO CASO SECTION -->
-        <section id="novo-caso" class="space-y-6">
+        <!-- Formulário de Entrada -->
+        <div class="glass rounded-2xl p-6 md:p-8 mb-6" id="inputSection">
+            <h2 class="text-xl font-bold text-white mb-6">Dados do Paciente</h2>
             
-            <!-- Upload de Arquivos -->
-            <div class="glass-panel p-6 rounded-xl border border-slate-700">
-                <h3 class="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                    <i data-lucide="file-up" class="w-5 h-5 text-cyan-400"></i>
-                    Upload de História Clínica
-                </h3>
-                
-                <div id="dropZone" class="border-2 border-dashed border-slate-600 rounded-xl p-8 text-center hover:border-cyan-500 transition-all cursor-pointer bg-slate-800/30" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)" onclick="document.getElementById('fileInput').click()">
-                    <input type="file" id="fileInput" class="hidden" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" multiple onchange="handleFiles(event)">
-                    
-                    <div class="w-16 h-16 rounded-full bg-cyan-500/10 flex items-center justify-center mx-auto mb-4">
-                        <i data-lucide="cloud-upload" class="w-8 h-8 text-cyan-400"></i>
-                    </div>
-                    <h4 class="text-lg font-medium text-white mb-2">Arraste arquivos ou clique para selecionar</h4>
-                    <p class="text-sm text-slate-400 mb-4">PDF, JPG, PNG, DOCX (máx. 10MB por arquivo)</p>
-                    <div class="flex justify-center gap-2 text-xs">
-                        <span class="px-3 py-1 rounded-full bg-slate-800 text-slate-400">Prontuário</span>
-                        <span class="px-3 py-1 rounded-full bg-slate-800 text-slate-400">Exames</span>
-                        <span class="px-3 py-1 rounded-full bg-slate-800 text-slate-400">Imagens</span>
-                    </div>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                <div class="md:col-span-2">
+                    <label class="block text-sm text-slate-400 mb-2">Nome Completo *</label>
+                    <input type="text" id="patientName" class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-3 text-white focus:border-cyan-500 focus:outline-none" placeholder="Ex: Carlos Eduardo Lima">
                 </div>
-
-                <!-- Lista de arquivos processados -->
-                <div id="fileList" class="mt-4 space-y-2 hidden">
-                    <!-- Arquivos aparecem aqui -->
+                <div>
+                    <label class="block text-sm text-slate-400 mb-2">Idade *</label>
+                    <input type="number" id="patientAge" class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-3 text-white focus:border-cyan-500 focus:outline-none" placeholder="Ex: 67">
                 </div>
-
-                <!-- Simulação de OCR -->
-                <div id="ocrResult" class="mt-4 hidden">
-                    <div class="p-4 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
-                        <div class="flex items-center gap-2 mb-2">
-                            <i data-lucide="scan-text" class="w-5 h-5 text-emerald-400"></i>
-                            <span class="text-emerald-400 font-medium">Texto extraído automaticamente:</span>
-                        </div>
-                        <p class="text-sm text-slate-300 italic" id="extractedText"></p>
-                    </div>
+                <div>
+                    <label class="block text-sm text-slate-400 mb-2">Sexo *</label>
+                    <select id="patientGender" class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-3 text-white focus:border-cyan-500 focus:outline-none">
+                        <option value="">Selecione</option>
+                        <option value="M">Masculino</option>
+                        <option value="F">Feminino</option>
+                    </select>
                 </div>
             </div>
 
-            <!-- Formulário de Entrada -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div class="glass-panel p-6 rounded-xl border border-slate-700">
-                    <h3 class="text-lg font-semibold text-white mb-4">Dados do Paciente</h3>
-                    
-                    <div class="space-y-4">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm text-slate-400 mb-2">Nome Completo *</label>
-                                <input type="text" id="patientName" class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-2 text-white focus:border-cyan-500 focus:outline-none" placeholder="Ex: Carlos Eduardo Lima">
-                            </div>
-                            <div>
-                                <label class="block text-sm text-slate-400 mb-2">Idade *</label>
-                                <input type="number" id="patientAge" class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-2 text-white focus:border-cyan-500 focus:outline-none" placeholder="Anos">
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm text-slate-400 mb-2">Sexo</label>
-                                <select id="patientGender" class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-2 text-white focus:border-cyan-500 focus:outline-none">
-                                    <option value="">Selecione</option>
-                                    <option value="M">Masculino</option>
-                                    <option value="F">Feminino</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-sm text-slate-400 mb-2">Peso (kg)</label>
-                                <input type="number" id="patientWeight" class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-2 text-white focus:border-cyan-500 focus:outline-none" placeholder="Ex: 75">
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm text-slate-400 mb-2">História Clínica / Queixa Principal *</label>
-                            <textarea id="clinicalHistory" rows="6" class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-3 text-white focus:border-cyan-500 focus:outline-none resize-none" placeholder="Descreva sintomas, duração, fatores de risco, comorbidades, medicamentos em uso..."></textarea>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm text-slate-400 mb-2">Exames Recentes (Opcional)</label>
-                            <textarea id="recentExams" rows="3" class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-3 text-white focus:border-cyan-500 focus:outline-none resize-none" placeholder="Cole resultados de exames laboratoriais, ECG, imagem..."></textarea>
-                        </div>
-
-                        <button onclick="analyzeCase()" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold py-3 rounded-lg transition-all flex items-center justify-center gap-2 neon-glow">
-                            <i data-lucide="brain-circuit" class="w-5 h-5"></i>
-                            Analisar e Gerar Previsões
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Calculadoras Rápidas -->
-                <div class="space-y-6">
-                    <div class="glass-panel p-6 rounded-xl border border-slate-700">
-                        <h3 class="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                            <i data-lucide="calculator" class="w-5 h-5 text-purple-400"></i>
-                            Calculadoras de Risco
-                        </h3>
-                        
-                        <div class="space-y-3">
-                            <button onclick="calculateScore(' framingham')" class="w-full p-3 rounded-lg bg-slate-800/50 hover:bg-slate-800 border border-slate-700 hover:border-purple-500/50 transition-all text-left flex justify-between items-center group">
-                                <div>
-                                    <p class="text-white font-medium">Risco Cardiovascular (Framingham)</p>
-                                    <p class="text-xs text-slate-400">10 anos - IAM/AVC</p>
-                                </div>
-                                <i data-lucide="chevron-right" class="w-5 h-5 text-slate-600 group-hover:text-purple-400"></i>
-                            </button>
-                            
-                            <button onclick="calculateScore('score2')" class="w-full p-3 rounded-lg bg-slate-800/50 hover:bg-slate-800 border border-slate-700 hover:border-purple-500/50 transition-all text-left flex justify-between items-center group">
-                                <div>
-                                    <p class="text-white font-medium">SCORE2 / SCORE2-OP</p>
-                                    <p class="text-xs text-slate-400">Risco fatal cardiovascular - ESC</p>
-                                </div>
-                                <i data-lucide="chevron-right" class="w-5 h-5 text-slate-600 group-hover:text-purple-400"></i>
-                            </button>
-                            
-                            <button onclick="calculateScore('ckd-epi')" class="w-full p-3 rounded-lg bg-slate-800/50 hover:bg-slate-800 border border-slate-700 hover:border-purple-500/50 transition-all text-left flex justify-between items-center group">
-                                <div>
-                                    <p class="text-white font-medium">Função Renal (CKD-EPI)</p>
-                                    <p class="text-xs text-slate-400">Taxa de filtração glomerular</p>
-                                </div>
-                                <i data-lucide="chevron-right" class="w-5 h-5 text-slate-600 group-hover:text-purple-400"></i>
-                            </button>
-
-                            <button onclick="calculateScore('apache')" class="w-full p-3 rounded-lg bg-slate-800/50 hover:bg-slate-800 border border-slate-700 hover:border-purple-500/50 transition-all text-left flex justify-between items-center group">
-                                <div>
-                                    <p class="text-white font-medium">APACHE II (UTI)</p>
-                                    <p class="text-xs text-slate-400">Mortalidade em terapia intensiva</p>
-                                </div>
-                                <i data-lucide="chevron-right" class="w-5 h-5 text-slate-600 group-hover:text-purple-400"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="glass-panel p-6 rounded-xl border border-slate-700 bg-gradient-to-br from-cyan-500/5 to-transparent">
-                        <h3 class="font-semibold text-white mb-3">Dicas de Preenchimento</h3>
-                        <ul class="space-y-2 text-sm text-slate-400">
-                            <li class="flex items-start gap-2">
-                                <i data-lucide="check-circle" class="w-4 h-4 text-cyan-400 mt-0.5"></i>
-                                <span>Inclua valores de PA, FC e saturação</span>
-                            </li>
-                            <li class="flex items-start gap-2">
-                                <i data-lucide="check-circle" class="w-4 h-4 text-cyan-400 mt-0.5"></i>
-                                <span>Mencione história familiar relevante</span>
-                            </li>
-                            <li class="flex items-start gap-2">
-                                <i data-lucide="check-circle" class="w-4 h-4 text-cyan-400 mt-0.5"></i>
-                                <span>Liste alergias medicamentosas</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+            <div class="mb-4">
+                <label class="block text-sm text-slate-400 mb-2">História Clínica Completa *</label>
+                <textarea id="clinicalHistory" rows="5" class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-3 text-white focus:border-cyan-500 focus:outline-none resize-none" placeholder="Descreva: sintomas, duração, comorbidades (diabetes, hipertensão, etc), medicamentos, história familiar, tabagismo, exames..."></textarea>
             </div>
 
-            <!-- Loading -->
-            <div id="analysisProgress" class="hidden glass-panel p-8 rounded-xl border border-cyan-500/30 text-center">
-                <div class="w-16 h-16 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                <h3 class="text-xl font-semibold text-white mb-2">Processando análise multidimensional...</h3>
-                <p class="text-slate-400 mb-4" id="analysisStatus">Extraindo parâmetros clínicos</p>
-                <div class="w-full bg-slate-700 rounded-full h-2 max-w-md mx-auto overflow-hidden">
-                    <div id="progressBar" class="h-full bg-cyan-500 transition-all duration-300" style="width: 0%"></div>
-                </div>
-                <div class="mt-4 flex justify-center gap-4 text-xs text-slate-500">
-                    <span class="flex items-center gap-1"><i data-lucide="database" class="w-3 h-3"></i> 50k+ casos</span>
-                    <span class="flex items-center gap-1"><i data-lucide="brain" class="w-3 h-3"></i> NLP Ativo</span>
-                    <span class="flex items-center gap-1"><i data-lucide="microscope" class="w-3 h-3"></i> Evidências 2024</span>
-                </div>
+            <div class="mb-6">
+                <label class="block text-sm text-slate-400 mb-2">Exames Recentes (Opcional)</label>
+                <textarea id="recentExams" rows="3" class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-3 text-white focus:border-cyan-500 focus:outline-none resize-none" placeholder="Cole resultados de laboratoriais, ECG, etc..."></textarea>
             </div>
 
-            <!-- RESULTADOS COMPLETOS -->
-            <div id="resultados" class="hidden space-y-6 slide-in">
-                
-                <!-- Cabeçalho do Paciente -->
-                <div class="glass-panel p-6 rounded-xl border-l-4 border-cyan-500 bg-cyan-500/5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                    <div>
-                        <h2 class="text-2xl font-bold text-white" id="resName">Nome do Paciente</h2>
-                        <p class="text-slate-400 mt-1" id="resInfo">-- anos | Sexo: -- | Análise: --</p>
-                    </div>
-                    <div class="flex gap-2">
-                        <button onclick="shareCase()" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-sm flex items-center gap-2 transition-colors">
-                            <i data-lucide="share-2" class="w-4 h-4"></i>
-                            Compartilhar
-                        </button>
-                        <button onclick="scheduleFollowup()" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-sm flex items-center gap-2 transition-colors">
-                            <i data-lucide="calendar-clock" class="w-4 h-4"></i>
-                            Agendar Follow-up
-                        </button>
-                    </div>
-                </div>
+            <button onclick="analyzeCase()" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-3 neon text-lg">
+                <i data-lucide="activity" class="w-6 h-6"></i>
+                Analisar e Gerar Previsões
+            </button>
+        </div>
 
-                <!-- Abas de Navegação -->
-                <div class="flex gap-6 border-b border-slate-700 overflow-x-auto">
-                    <button onclick="showResultTab('visao-geral')" id="tab-visao-geral" class="tab-btn pb-3 text-cyan-400 border-b-2 border-cyan-400 font-medium whitespace-nowrap">Visão Geral</button>
-                    <button onclick="showResultTab('desfechos')" id="tab-desfechos" class="tab-btn pb-3 text-slate-400 hover:text-white font-medium whitespace-nowrap">Desfechos Futuros</button>
-                    <button onclick="showResultTab('tratamentos')" id="tab-tratamentos" class="tab-btn pb-3 text-slate-400 hover:text-white font-medium whitespace-nowrap">Protocolos</button>
-                    <button onclick="showResultTab('alternativos')" id="tab-alternativos" class="tab-btn pb-3 text-slate-400 hover:text-white font-medium whitespace-nowrap">Terapias Alternativas</button>
-                    <button onclick="showResultTab('pesquisa')" id="tab-pesquisa" class="tab-btn pb-3 text-slate-400 hover:text-white font-medium whitespace-nowrap flex items-center gap-1">
-                        Em Pesquisa <span class="px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-400 text-xs">Novo</span>
-                    </button>
-                </div>
-
-                <!-- CONTEÚDO: VISÃO GERAL -->
-                <div id="content-visao-geral" class="result-content space-y-6">
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                        <div class="glass-panel p-4 rounded-xl border border-slate-700 text-center">
-                            <p class="text-slate-400 text-sm mb-1">Score de Risco Global</p>
-                            <p class="text-3xl font-bold text-white" id="resScore">--</p>
-                            <span class="inline-block mt-2 px-3 py-1 rounded-full text-xs font-medium" id="resRiskBadge">--</span>
-                        </div>
-                        <div class="glass-panel p-4 rounded-xl border border-slate-700 text-center">
-                            <p class="text-slate-400 text-sm mb-1">Expectativa de Vida</p>
-                            <p class="text-3xl font-bold text-emerald-400" id="resLifeExp">--</p>
-                            <p class="text-xs text-slate-500 mt-1">vs. população geral</p>
-                        </div>
-                        <div class="glass-panel p-4 rounded-xl border border-slate-700 text-center">
-                            <p class="text-slate-400 text-sm mb-1">Qualidade de Vida</p>
-                            <p class="text-3xl font-bold text-blue-400" id="resQOL">--</p>
-                            <p class="text-xs text-slate-500 mt-1">EQ-5D estimado</p>
-                        </div>
-                        <div class="glass-panel p-4 rounded-xl border border-slate-700 text-center">
-                            <p class="text-slate-400 text-sm mb-1">Custo Estimado (Ano)</p>
-                            <p class="text-3xl font-bold text-yellow-400" id="resCost">R$ --</p>
-                            <p class="text-xs text-slate-500 mt-1">SUS/Operadora</p>
-                        </div>
-                    </div>
-
-                    <div class="glass-panel p-6 rounded-xl border border-slate-700">
-                        <h3 class="text-lg font-semibold text-white mb-4">Resumo Executivo da Análise</h3>
-                        <div id="executiveSummary" class="prose prose-invert max-w-none text-slate-300 space-y-3">
-                            <!-- Conteúdo dinâmico -->
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <div class="glass-panel p-6 rounded-xl border border-slate-700">
-                            <h3 class="text-lg font-semibold text-white mb-4">Fatores de Risco Identificados</h3>
-                            <div id="riskFactors" class="space-y-3">
-                                <!-- Lista dinâmica -->
-                            </div>
-                        </div>
-
-                        <div class="glass-panel p-6 rounded-xl border border-slate-700">
-                            <h3 class="text-lg font-semibold text-white mb-4">Comorbidades Detectadas</h3>
-                            <div id="comorbidities" class="flex flex-wrap gap-2">
-                                <!-- Tags dinâmicas -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- CONTEÚDO: DESFECHOS FUTUROS -->
-                <div id="content-desfechos" class="result-content hidden space-y-6">
-                    
-                    <!-- Timeline Visual -->
-                    <div class="glass-panel p-6 rounded-xl border border-slate-700">
-                        <h3 class="text-lg font-semibold text-white mb-6">Linha do Tempo de Desfechos Previstos</h3>
-                        
-                        <div class="relative pl-8 space-y-8" id="timelineContainer">
-                            <div class="timeline-line"></div>
-                            
-                            <!-- 6 meses -->
-                            <div class="relative">
-                                <div class="absolute -left-8 w-4 h-4 rounded-full bg-cyan-500 border-4 border-slate-800"></div>
-                                <div class="glass-panel p-4 rounded-lg border border-slate-700 ml-4">
-                                    <div class="flex justify-between items-start mb-2">
-                                        <h4 class="font-semibold text-cyan-400">6 Meses</h4>
-                                        <span class="px-2 py-1 rounded bg-cyan-500/10 text-cyan-400 text-xs">Curto Prazo</span>
-                                    </div>
-                                    <div id="outcomes-6m" class="space-y-2">
-                                        <!-- Desfechos dinâmicos -->
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- 12 meses -->
-                            <div class="relative">
-                                <div class="absolute -left-8 w-4 h-4 rounded-full bg-blue-500 border-4 border-slate-800"></div>
-                                <div class="glass-panel p-4 rounded-lg border border-slate-700 ml-4">
-                                    <div class="flex justify-between items-start mb-2">
-                                        <h4 class="font-semibold text-blue-400">12 Meses</h4>
-                                        <span class="px-2 py-1 rounded bg-blue-500/10 text-blue-400 text-xs">Médio Prazo</span>
-                                    </div>
-                                    <div id="outcomes-12m" class="space-y-2"></div>
-                                </div>
-                            </div>
-
-                            <!-- 24 meses -->
-                            <div class="relative">
-                                <div class="absolute -left-8 w-4 h-4 rounded-full bg-purple-500 border-4 border-slate-800"></div>
-                                <div class="glass-panel p-4 rounded-lg border border-slate-700 ml-4">
-                                    <div class="flex justify-between items-start mb-2">
-                                        <h4 class="font-semibold text-purple-400">24 Meses</h4>
-                                        <span class="px-2 py-1 rounded bg-purple-500/10 text-purple-400 text-xs">Longo Prazo</span>
-                                    </div>
-                                    <div id="outcomes-24m" class="space-y-2"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Cenários Comparativos -->
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div class="glass-panel p-6 rounded-xl border border-emerald-500/30 bg-emerald-500/5">
-                            <h4 class="font-semibold text-emerald-400 mb-3 flex items-center gap-2">
-                                <i data-lucide="trending-up" class="w-5 h-5"></i>
-                                Cenário Otimista
-                            </h4>
-                            <p class="text-sm text-slate-300 mb-3">Adesão completa ao tratamento + modificação de estilo de vida.</p>
-                            <ul class="text-sm text-slate-400 space-y-1" id="optimistic-scenario">
-                                <!-- Itens dinâmicos -->
-                            </ul>
-                        </div>
-
-                        <div class="glass-panel p-6 rounded-xl border border-yellow-500/30 bg-yellow-500/5">
-                            <h4 class="font-semibold text-yellow-400 mb-3 flex items-center gap-2">
-                                <i data-lucide="activity" class="w-5 h-5"></i>
-                                Cenário Provável
-                            </h4>
-                            <p class="text-sm text-slate-300 mb-3">Adesão moderada ao tratamento padrão.</p>
-                            <ul class="text-sm text-slate-400 space-y-1" id="probable-scenario">
-                                <!-- Itens dinâmicos -->
-                            </ul>
-                        </div>
-
-                        <div class="glass-panel p-6 rounded-xl border border-red-500/30 bg-red-500/5">
-                            <h4 class="font-semibold text-red-400 mb-3 flex items-center gap-2">
-                                <i data-lucide="alert-triangle" class="w-5 h-5"></i>
-                                Cenário Pessimista
-                            </h4>
-                            <p class="text-sm text-slate-300 mb-3">Baixa adesão ou complicações imprevistas.</p>
-                            <ul class="text-sm text-slate-400 space-y-1" id="pessimistic-scenario">
-                                <!-- Itens dinâmicos -->
-                            </ul>
-                        </div>
-                    </div>
-
-                    <!-- Gráfico de Probabilidades -->
-                    <div class="glass-panel p-6 rounded-xl border border-slate-700">
-                        <h3 class="text-lg font-semibold text-white mb-4">Probabilidades Acumuladas por Evento</h3>
-                        <canvas id="outcomesChart" height="200"></canvas>
-                    </div>
-                </div>
-
-                <!-- CONTEÚDO: TRATAMENTOS -->
-                <div id="content-tratamentos" class="result-content hidden space-y-6">
-                    
-                    <!-- Protocolo de Primeira Linha -->
-                    <div class="glass-panel p-6 rounded-xl border border-cyan-500/20 bg-cyan-500/5">
-                        <div class="flex items-center gap-3 mb-4">
-                            <span class="px-3 py-1 rounded-full bg-cyan-500 text-slate-900 text-xs font-bold">1ª LINHA</span>
-                            <h3 class="text-lg font-semibold text-white">Protocolo Padrão Ouro</h3>
-                        </div>
-                        <div id="firstLineTreatments" class="space-y-4">
-                            <!-- Tratamentos dinâmicos -->
-                        </div>
-                    </div>
-
-                    <!-- Segunda Linha -->
-                    <div class="glass-panel p-6 rounded-xl border border-slate-700">
-                        <div class="flex items-center gap-3 mb-4">
-                            <span class="px-3 py-1 rounded-full bg-yellow-500 text-slate-900 text-xs font-bold">2ª LINHA</span>
-                            <h3 class="text-lg font-semibold text-white">Alternativas Terapêuticas</h3>
-                            <span class="text-xs text-slate-400">(Se intolerância ou falha ao 1º tratamento)</span>
-                        </div>
-                        <div id="secondLineTreatments" class="space-y-3">
-                            <!-- Alternativas -->
-                        </div>
-                    </div>
-
-                    <!-- Interações Medicamentosas -->
-                    <div class="glass-panel p-6 rounded-xl border border-red-500/20 bg-red-500/5" id="drugInteractions" style="display: none;">
-                        <h3 class="text-lg font-semibold text-red-400 mb-3 flex items-center gap-2">
-                            <i data-lucide="alert-circle" class="w-5 h-5"></i>
-                            Alertas de Interação Medicamentosa Detectados
-                        </h3>
-                        <div id="interactionsList" class="space-y-2"></div>
-                    </div>
-
-                    <!-- Cronograma de Tratamento -->
-                    <div class="glass-panel p-6 rounded-xl border border-slate-700">
-                        <h3 class="text-lg font-semibold text-white mb-4">Cronograma Terapêutico Sugerido</h3>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left">
-                                <thead class="border-b border-slate-700 text-slate-400 text-sm">
-                                    <tr>
-                                        <th class="pb-3">Fase</th>
-                                        <th class="pb-3">Período</th>
-                                        <th class="pb-3">Intervenções</th>
-                                        <th class="pb-3">Objetivos</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="treatmentTimeline" class="text-sm">
-                                    <!-- Linhas dinâmicas -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- CONTEÚDO: TERAPIAS ALTERNATIVAS -->
-                <div id="content-alternativos" class="result-content hidden space-y-6">
-                    <div class="glass-panel p-6 rounded-xl border border-slate-700 bg-gradient-to-br from-orange-500/5 to-transparent">
-                        <div class="flex items-start gap-4 mb-6">
-                            <div class="p-3 rounded-lg alternative-badge text-white">
-                                <i data-lucide="leaf" class="w-6 h-6"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-semibold text-white">Medicina Complementar e Integrativa</h3>
-                                <p class="text-sm text-slate-400">Baseado em evidências científicas (NCCIH, Cochrane)</p>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="alternativeTherapies">
-                            <!-- Terapias alternativas -->
-                        </div>
-
-                        <div class="mt-6 p-4 rounded-lg bg-yellow-500/10 border border-yellow-500/20 flex items-start gap-3">
-                            <i data-lucide="alert-triangle" class="w-5 h-5 text-yellow-400 mt-0.5"></i>
-                            <div>
-                                <p class="text-sm text-yellow-200 font-medium">Aviso Importante</p>
-                                <p class="text-sm text-slate-300">Terapias complementares não substituem o tratamento convencional. Sempre discuta com o paciente os riscos e benefícios, verificando contraindicações.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Modulação de Estilo de Vida Específica -->
-                    <div class="glass-panel p-6 rounded-xl border border-slate-700">
-                        <h3 class="text-lg font-semibold text-white mb-4">Prescrição de Estilo de Vida (Lifestyle Medicine)</h3>
-                        <div id="lifestylePrescription" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <!-- Prescrições -->
-                        </div>
-                    </div>
-                </div>
-
-                <!-- CONTEÚDO: EM PESQUISA -->
-                <div id="content-pesquisa" class="result-content hidden space-y-6">
-                    <div class="glass-panel p-6 rounded-xl border border-slate-700">
-                        <div class="flex items-center justify-between mb-6">
-                            <div class="flex items-center gap-3">
-                                <div class="p-3 rounded-lg research-badge text-white">
-                                    <i data-lucide="flask-conical" class="w-6 h-6"></i>
-                                </div>
-                                <div>
-                                    <h3 class="text-lg font-semibold text-white">Ensaios Clínicos e Terapias Experimentais</h3>
-                                    <p class="text-sm text-slate-400">ClinicalTrials.gov / WHO ICTRP</p>
-                                </div>
-                            </div>
-                            <button onclick="filterResearch()" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-sm transition-colors">
-                                Filtrar por Fase
-                            </button>
-                        </div>
-
-                        <div class="space-y-4" id="clinicalTrials">
-                            <!-- Trials dinâmicos -->
-                        </div>
-                    </div>
-
-                    <!-- Terapias de Precisão / Genômica -->
-                    <div class="glass-panel p-6 rounded-xl border border-purple-500/20 bg-purple-500/5">
-                        <h3 class="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                            <i data-lucide="dna" class="w-5 h-5 text-purple-400"></i>
-                            Medicina de Precisão e Biomarcadores
-                        </h3>
-                        <div id="precisionMedicine" class="space-y-3">
-                            <!-- Conteúdo genômico -->
-                        </div>
-                    </div>
-
-                    <!-- Tecnologias Emergentes -->
-                    <div class="glass-panel p-6 rounded-xl border border-slate-700">
-                        <h3 class="text-lg font-semibold text-white mb-4">Tecnologias Emergentes (5-10 anos)</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="emergingTech">
-                            <!-- Tecnologias -->
-                        </div>
-                    </div>
-                </div>
-
+        <!-- Loading -->
+        <div id="analysisProgress" class="hidden glass rounded-2xl p-8 text-center">
+            <div class="w-16 h-16 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <h3 class="text-xl font-semibold text-white mb-2">Analisando dados clínicos...</h3>
+            <p class="text-slate-400 mb-4" id="analysisStatus">Identificando fatores de risco...</p>
+            <div class="w-full bg-slate-700 rounded-full h-2 max-w-md mx-auto overflow-hidden">
+                <div id="progressBar" class="h-full bg-cyan-500 transition-all duration-300" style="width: 0%"></div>
             </div>
-        </section>
+        </div>
 
-        <!-- DASHBOARD PLACEHOLDER -->
-        <section id="dashboard" class="space-y-6">
-            <div class="glass-panel p-12 rounded-xl border border-slate-700 text-center">
-                <i data-lucide="layout-dashboard" class="w-16 h-16 text-slate-600 mx-auto mb-4"></i>
-                <h2 class="text-2xl font-bold text-white mb-2">Dashboard Analytics</h2>
-                <p class="text-slate-400 mb-4">Visualize estatísticas de desfechos e eficácia de tratamentos</p>
-                <button onclick="showSection('novo-caso')" class="px-6 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold transition-colors">
-                    Iniciar Nova Análise
+        <!-- RESULTADOS -->
+        <div id="resultados" class="hidden space-y-6 animate-slide">
+            
+            <!-- Cabeçalho -->
+            <div class="glass rounded-2xl p-6 border-l-4 border-cyan-500 bg-cyan-500/5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-white" id="resName">--</h2>
+                    <p class="text-slate-400 mt-1" id="resInfo">--</p>
+                </div>
+                <button onclick="newAnalysis()" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-sm transition-colors">
+                    Nova Análise
                 </button>
             </div>
-        </section>
 
-    </main>
-
-    <!-- Modal de Calculadora -->
-    <div id="calcModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="glass-panel w-full max-w-lg rounded-2xl border border-slate-700 p-6 relative">
-            <button onclick="closeCalc()" class="absolute top-4 right-4 text-slate-400 hover:text-white">
-                <i data-lucide="x" class="w-6 h-6"></i>
-            </button>
-            <h3 class="text-xl font-bold text-white mb-4" id="calcTitle">Calculadora</h3>
-            <div id="calcContent" class="space-y-4">
-                <!-- Campos dinâmicos -->
+            <!-- Score Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="glass rounded-xl p-4 border border-slate-700 text-center">
+                    <p class="text-slate-400 text-sm mb-1">Score de Risco Global</p>
+                    <p class="text-3xl font-bold" id="resScore">--</p>
+                    <span class="inline-block mt-2 px-3 py-1 rounded-full text-xs font-medium" id="resRiskBadge">--</span>
+                </div>
+                <div class="glass rounded-xl p-4 border border-slate-700 text-center">
+                    <p class="text-slate-400 text-sm mb-1">Fatores Identificados</p>
+                    <p class="text-3xl font-bold text-yellow-400" id="resFactorsCount">--</p>
+                </div>
+                <div class="glass rounded-xl p-4 border border-slate-700 text-center">
+                    <p class="text-slate-400 text-sm mb-1">Comorbidades</p>
+                    <p class="text-3xl font-bold text-purple-400" id="resComorbCount">--</p>
+                </div>
+                <div class="glass rounded-xl p-4 border border-slate-700 text-center">
+                    <p class="text-slate-400 text-sm mb-1">Risco 10 anos</p>
+                    <p class="text-3xl font-bold text-emerald-400" id="res10Year">--</p>
+                </div>
             </div>
-            <button onclick="calculate()" class="w-full mt-6 bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-bold py-3 rounded-lg transition-colors">
-                Calcular
-            </button>
-            <div id="calcResult" class="mt-4 hidden p-4 rounded-lg bg-slate-800 border border-slate-700"></div>
+
+            <!-- Abas -->
+            <div class="flex gap-6 border-b border-slate-700 overflow-x-auto">
+                <button onclick="showTab('visao')" id="tab-visao" class="pb-3 text-cyan-400 border-b-2 border-cyan-400 font-medium">Visão Geral</button>
+                <button onclick="showTab('fatores')" id="tab-fatores" class="pb-3 text-slate-400 hover:text-white font-medium">Fatores de Risco</button>
+                <button onclick="showTab('desfechos')" id="tab-desfechos" class="pb-3 text-slate-400 hover:text-white font-medium">Desfechos</button>
+                <button onclick="showTab('tratamentos')" id="tab-tratamentos" class="pb-3 text-slate-400 hover:text-white font-medium">Tratamentos</button>
+            </div>
+
+            <!-- Conteúdo: Visão Geral -->
+            <div id="content-visao" class="tab-content space-y-6">
+                <div class="glass rounded-xl p-6 border border-slate-700">
+                    <h3 class="text-lg font-semibold text-white mb-4">Resumo da Análise</h3>
+                    <p class="text-slate-300 leading-relaxed" id="executiveSummary"></p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="glass rounded-xl p-6 border border-slate-700">
+                        <h3 class="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                            <i data-lucide="alert-triangle" class="text-yellow-400"></i>
+                            Fatores de Risco Identificados
+                        </h3>
+                        <ul id="riskFactorsList" class="space-y-3">
+                            <!-- Dinâmico -->
+                        </ul>
+                    </div>
+
+                    <div class="glass rounded-xl p-6 border border-slate-700">
+                        <h3 class="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                            <i data-lucide="stethoscope" class="text-purple-400"></i>
+                            Comorbidades Detectadas
+                        </h3>
+                        <div id="comorbiditiesList" class="flex flex-wrap gap-2">
+                            <!-- Dinâmico -->
+                        </div>
+                        <div id="noComorbidities" class="hidden text-slate-500 text-sm italic mt-2">
+                            Nenhuma comorbidade significativa detectada no histórico.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Conteúdo: Fatores de Risco Detalhados -->
+            <div id="content-fatores" class="tab-content hidden space-y-6">
+                <div class="glass rounded-xl p-6 border border-slate-700">
+                    <h3 class="text-lg font-semibold text-white mb-6">Análise Detalhada de Riscos</h3>
+                    <div id="detailedRiskAnalysis" class="space-y-4">
+                        <!-- Análise detalhada -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Conteúdo: Desfechos -->
+            <div id="content-desfechos" class="tab-content hidden space-y-6">
+                <div class="glass rounded-xl p-6 border border-slate-700">
+                    <h3 class="text-lg font-semibold text-white mb-6">Probabilidades de Desfecho</h3>
+                    
+                    <div class="space-y-4" id="outcomesList">
+                        <!-- Dinâmico -->
+                    </div>
+
+                    <div class="mt-6 p-4 rounded-lg bg-slate-800/50 border border-slate-700">
+                        <h4 class="font-semibold text-white mb-3">Cenários Comparativos</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                            <div class="p-3 rounded bg-emerald-500/10 border border-emerald-500/20">
+                                <p class="text-emerald-400 font-bold mb-1">Otimista</p>
+                                <p class="text-slate-300">Com tratamento adequado e adesão completa</p>
+                            </div>
+                            <div class="p-3 rounded bg-yellow-500/10 border border-yellow-500/20">
+                                <p class="text-yellow-400 font-bold mb-1">Provável</p>
+                                <p class="text-slate-300">Adesão parcial ao tratamento padrão</p>
+                            </div>
+                            <div class="p-3 rounded bg-red-500/10 border border-red-500/20">
+                                <p class="text-red-400 font-bold mb-1">Pessimista</p>
+                                <p class="text-slate-300">Sem tratamento ou baixa adesão</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Conteúdo: Tratamentos -->
+            <div id="content-tratamentos" class="tab-content hidden space-y-6">
+                <div class="glass rounded-xl p-6 border border-cyan-500/20 bg-cyan-500/5">
+                    <h3 class="text-lg font-semibold text-white mb-4">Protocolo Recomendado</h3>
+                    <div id="treatmentProtocol" class="space-y-3">
+                        <!-- Dinâmico -->
+                    </div>
+                </div>
+
+                <div class="glass rounded-xl p-6 border border-slate-700">
+                    <h3 class="text-lg font-semibold text-white mb-4">Recomendações Complementares</h3>
+                    <ul id="complementaryRecs" class="space-y-2 text-slate-300">
+                        <!-- Dinâmico -->
+                    </ul>
+                </div>
+            </div>
+
         </div>
     </div>
 
     <script>
-        // Inicialização
         lucide.createIcons();
-        let currentAnalysis = null;
-        let uploadedFiles = [];
 
-        // Navegação entre seções
-        function showSection(sectionId) {
-            document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
-            document.getElementById(sectionId).classList.remove('hidden');
-            window.scrollTo(0, 0);
-        }
-
-        // Upload de Arquivos
-        function handleDragOver(e) {
-            e.preventDefault();
-            e.currentTarget.classList.add('drag-active');
-        }
-
-        function handleDragLeave(e) {
-            e.currentTarget.classList.remove('drag-active');
-        }
-
-        function handleDrop(e) {
-            e.preventDefault();
-            e.currentTarget.classList.remove('drag-active');
-            const files = e.dataTransfer.files;
-            processFiles(files);
-        }
-
-        function handleFiles(e) {
-            processFiles(e.target.files);
-        }
-
-        function processFiles(files) {
-            const list = document.getElementById('fileList');
-            const ocrDiv = document.getElementById('ocrResult');
+        // Banco de dados de keywords médicas expandido
+        const medicalKeywords = {
+            cardiovascular: ['coração', 'cardíaco', 'cardiac', 'peito', 'torácica', 'angina', 'infarto', 'iam', 'avc', 'derrame', 'stroke', 'pressão alta', 'hipertensão', 'hta', 'hpb', 'arrythmia', 'arritmia', 'fibrilação', 'flutter', 'sopro', 'insuficiência cardíaca', 'ic', 'coronária', 'revascularização', 'angioplastia', 'stent', 'ponte', 'sapheno'],
             
-            Array.from(files).forEach(file => {
-                uploadedFiles.push(file);
-                
-                // Simula OCR/extração
-                setTimeout(() => {
-                    ocrDiv.classList.remove('hidden');
-                    document.getElementById('extractedText').textContent = 
-                        `Texto extraído de ${file.name}: Paciente apresenta histórico de ${file.type.includes('pdf') ? 'múltiplas comorbidades' : 'exames de imagem compatíveis'}... [Simulação de OCR]`;
-                }, 1500);
-            });
-
-            updateFileList();
-        }
-
-        function updateFileList() {
-            const list = document.getElementById('fileList');
-            if (uploadedFiles.length > 0) {
-                list.classList.remove('hidden');
-                list.innerHTML = uploadedFiles.map((f, i) => `
-                    <div class="flex items-center justify-between p-3 rounded-lg bg-slate-800/50 border border-slate-700">
-                        <div class="flex items-center gap-3">
-                            <i data-lucide="file-text" class="w-5 h-5 text-cyan-400"></i>
-                            <span class="text-sm text-slate-300">${f.name}</span>
-                            <span class="text-xs text-slate-500">(${(f.size/1024).toFixed(1)} KB)</span>
-                        </div>
-                        <button onclick="removeFile(${i})" class="text-red-400 hover:text-red-300">
-                            <i data-lucide="trash-2" class="w-4 h-4"></i>
-                        </button>
-                    </div>
-                `).join('');
-                lucide.createIcons();
+            metabolic: ['diabetes', 'diabético', 'glicose', 'glicemia', 'açúcar', 'hba1c', 'glicada', 'insulina', 'hipoglicemiante', 'metformina', 'obesidade', 'obeso', 'sobrepeso', 'imc', 'hipercolesterolemia', 'colesterol', 'ldl', 'hdl', 'triglicerídeos', 'dislipidemia', 'síndrome metabólica', 'resistência insulínica'],
+            
+            renal: ['rim', 'renal', 'creatinina', 'ureia', 'clearence', 'ckd', 'irc', 'diálise', 'nefropatia', 'proteinúria', 'microalbuminúria', 'hemodiálise', 'peritoneal'],
+            
+            respiratory: ['pulmão', 'respiratório', 'asma', 'dpoc', 'bronquite', 'enfisema', 'tosse', 'dispneia', 'oxigênio', 'o2', 'sat', 'spo2', 'ventilação', 'cpap', 'bipap', 'saos', 'apneia'],
+            
+            neurological: ['cérebro', 'cerebral', 'avc', 'tce', 'epilepsia', 'convulsão', 'parkinson', 'alzheimer', 'demência', 'neuropatia', 'cefaleia', 'enxaqueca', 'tontura', 'vertigem', 'sincope', 'desmaio'],
+            
+            oncological: ['câncer', 'cancer', 'tumor', 'neoplasia', 'metástase', 'quimioterapia', 'radioterapia', 'carcinoma', 'adenocarcinoma', 'sarcoma', 'leucemia', 'linfoma'],
+            
+            riskFactors: {
+                smoking: ['tabagismo', 'tabagista', 'fumante', 'fuma', 'cigarro', 'maconha', 'narguilé'],
+                alcohol: ['etilismo', 'álcool', 'alcoolismo', 'bebida', 'etilista'],
+                sedentary: ['sedentarismo', 'sedentário', 'inativo', 'não pratica', 'sem atividade'],
+                familyHistory: ['história familiar', 'pai teve', 'mãe teve', 'avô', 'avó', 'hereditário', 'familial'],
+                stress: ['stress', 'estresse', 'ansiedade', 'depressão', 'burnout', 'insonia', 'insônia']
             }
-        }
+        };
 
-        function removeFile(index) {
-            uploadedFiles.splice(index, 1);
-            updateFileList();
-        }
-
-        // Análise Principal
         function analyzeCase() {
-            const name = document.getElementById('patientName').value;
+            const name = document.getElementById('patientName').value.trim();
             const age = parseInt(document.getElementById('patientAge').value);
-            const history = document.getElementById('clinicalHistory').value;
+            const gender = document.getElementById('patientGender').value;
+            const history = document.getElementById('clinicalHistory').value.toLowerCase();
+            const exams = document.getElementById('recentExams').value.toLowerCase();
             
-            if (!name || !age || !history) {
-                alert('Preencha os campos obrigatórios: Nome, Idade e História Clínica');
+            const fullText = history + ' ' + exams;
+
+            if (!name || !age || !gender || !history) {
+                alert('Preencha todos os campos obrigatórios: Nome, Idade, Sexo e História Clínica');
                 return;
             }
 
-            // Simulação de análise
+            // Mostrar loading
+            document.getElementById('inputSection').classList.add('hidden');
             document.getElementById('analysisProgress').classList.remove('hidden');
-            document.getElementById('resultados').classList.add('hidden');
             
+            // Simular progresso
             let progress = 0;
             const bar = document.getElementById('progressBar');
-            const statuses = [
-                'Extraindo parâmetros clínicos...',
-                'Analisando comorbidades...',
-                'Calculando scores de risco...',
-                'Buscando protocolos atualizados...',
-                'Gerando previsões de desfechos...',
-                'Finalizando relatório completo...'
-            ];
-
             const interval = setInterval(() => {
-                progress += 16;
-                bar.style.width = Math.min(progress, 100) + '%';
-                document.getElementById('analysisStatus').textContent = statuses[Math.floor((progress/100) * statuses.length)] || 'Finalizando...';
-                
+                progress += 20;
+                bar.style.width = progress + '%';
                 if (progress >= 100) {
                     clearInterval(interval);
-                    setTimeout(() => generateCompleteAnalysis(name, age, history), 500);
+                    setTimeout(() => {
+                        generateAnalysis(name, age, gender, fullText);
+                    }, 500);
                 }
-            }, 400);
+            }, 300);
         }
 
-        function generateCompleteAnalysis(name, age, history) {
+        function generateAnalysis(name, age, gender, text) {
             document.getElementById('analysisProgress').classList.add('hidden');
             document.getElementById('resultados').classList.remove('hidden');
+
+            // Detectar condições
+            const detectedConditions = [];
+            const riskFactors = [];
             
-            // Dados básicos
+            // Verificar comorbidades
+            if (medicalKeywords.cardiovascular.some(k => text.includes(k))) {
+                detectedConditions.push({name: 'Doença Cardiovascular', severity: 'high', icon: 'heart'});
+            }
+            if (medicalKeywords.metabolic.some(k => text.includes(k))) {
+                detectedConditions.push({name: 'Doença Metabólica', severity: 'medium', icon: 'activity'});
+            }
+            if (medicalKeywords.renal.some(k => text.includes(k))) {
+                detectedConditions.push({name: 'Doença Renal', severity: 'high', icon: 'droplets'});
+            }
+            if (medicalKeywords.respiratory.some(k => text.includes(k))) {
+                detectedConditions.push({name: 'Doença Respiratória', severity: 'medium', icon: 'wind'});
+            }
+            if (medicalKeywords.neurological.some(k => text.includes(k))) {
+                detectedConditions.push({name: 'Doença Neurológica', severity: 'high', icon: 'brain'});
+            }
+            if (medicalKeywords.oncological.some(k => text.includes(k))) {
+                detectedConditions.push({name: 'Neoplasia', severity: 'high', icon: 'alert-circle'});
+            }
+
+            // Verificar fatores de risco
+            if (medicalKeywords.riskFactors.smoking.some(k => text.includes(k))) {
+                riskFactors.push({name: 'Tabagismo', impact: 'high', description: 'Aumenta risco cardiovascular em 2-3x'});
+            }
+            if (medicalKeywords.riskFactors.alcohol.some(k => text.includes(k))) {
+                riskFactors.push({name: 'Uso de Álcool', impact: 'medium', description: 'Impacto hepático e cardiovascular'});
+            }
+            if (medicalKeywords.riskFactors.sedentary.some(k => text.includes(k))) {
+                riskFactors.push({name: 'Sedentarismo', impact: 'medium', description: 'Aumenta risco metabólico'});
+            }
+            if (medicalKeywords.riskFactors.familyHistory.some(k => text.includes(k))) {
+                riskFactors.push({name: 'História Familiar Positiva', impact: 'high', description: 'Predisposição genética identificada'});
+            }
+            if (age > 60) {
+                riskFactors.push({name: 'Idade Avançada', impact: 'high', description: `${age} anos - aumento natural do risco`});
+            }
+            if (age > 40 && gender === 'M') {
+                riskFactors.push({name: 'Sexo Masculino >40', impact: 'medium', description: 'Maior risco cardiovascular precoce'});
+            }
+            if (text.includes('obesidade') || text.includes('obeso')) {
+                riskFactors.push({name: 'Obesidade', impact: 'high', description: 'IMC elevado - fator de risco metabólico'});
+            }
+
+            // Se não detectou nada específico, adiciona condição geral
+            if (detectedConditions.length === 0) {
+                detectedConditions.push({name: 'Condição Geral', severity: 'low', icon: 'user'});
+            }
+
+            // Calcular Score DINÂMICO (0-100)
+            let baseScore = 0;
+            
+            // Pontuação por idade (curva sigmoid)
+            if (age < 40) baseScore += 5;
+            else if (age < 50) baseScore += 15;
+            else if (age < 60) baseScore += 30;
+            else if (age < 70) baseScore += 45;
+            else baseScore += 60;
+
+            // Pontuação por condições
+            detectedConditions.forEach(c => {
+                if (c.severity === 'high') baseScore += 15;
+                else if (c.severity === 'medium') baseScore += 8;
+                else baseScore += 3;
+            });
+
+            // Pontuação por fatores de risco
+            riskFactors.forEach(r => {
+                if (r.impact === 'high') baseScore += 10;
+                else if (r.impact === 'medium') baseScore += 5;
+            });
+
+            // Sexo (masculino tem risco ligeiramente maior em certas idades)
+            if (gender === 'M' && age > 45) baseScore += 3;
+
+            // Limitar a 98%
+            const finalScore = Math.min(baseScore, 98);
+            
+            // Calcular risco em 10 anos (Framingham adaptado simplificado)
+            const risk10Years = Math.min(Math.round(finalScore * 0.6), 95);
+
+            // Atualizar Header
             document.getElementById('resName').textContent = name;
-            document.getElementById('resInfo').textContent = `${age} anos | Análise: ${new Date().toLocaleDateString('pt-BR')} ${new Date().toLocaleTimeString('pt-BR')}`;
-            
-            // Cálculo de risco simulado
-            const hasHypertension = history.toLowerCase().includes('hipertensão') || history.toLowerCase().includes('pressão');
-            const hasDiabetes = history.toLowerCase().includes('diabetes');
-            const hasCardiac = history.toLowerCase().includes('cardíaco') || history.toLowerCase().includes('coração');
-            
-            let riskScore = Math.min(age * 0.8 + (hasHypertension ? 10 : 0) + (hasDiabetes ? 15 : 0) + (hasCardiac ? 20 : 0), 95);
-            riskScore = Math.floor(riskScore);
-            
-            // Atualiza score
+            document.getElementById('resInfo').textContent = `${age} anos | Sexo: ${gender === 'M' ? 'Masculino' : 'Feminino'} | Análise: ${new Date().toLocaleDateString('pt-BR')}`;
+
+            // Atualizar Scores
             const scoreEl = document.getElementById('resScore');
-            const badgeEl = document.getElementById('resRiskBadge');
-            scoreEl.textContent = riskScore + '%';
+            scoreEl.textContent = finalScore + '%';
             
-            if (riskScore > 70) {
+            // Cor do score
+            if (finalScore >= 70) {
                 scoreEl.className = 'text-3xl font-bold text-red-400';
-                badgeEl.className = 'inline-block mt-2 px-3 py-1 rounded-full text-xs font-medium bg-red-500/20 text-red-400';
-                badgeEl.textContent = 'Alto Risco';
-            } else if (riskScore > 40) {
+                document.getElementById('resRiskBadge').className = 'inline-block mt-2 px-3 py-1 rounded-full text-xs font-medium bg-red-500/20 text-red-400';
+                document.getElementById('resRiskBadge').textContent = 'Alto Risco';
+            } else if (finalScore >= 40) {
                 scoreEl.className = 'text-3xl font-bold text-yellow-400';
-                badgeEl.className = 'inline-block mt-2 px-3 py-1 rounded-full text-xs font-medium bg-yellow-500/20 text-yellow-400';
-                badgeEl.textContent = 'Risco Moderado';
+                document.getElementById('resRiskBadge').className = 'inline-block mt-2 px-3 py-1 rounded-full text-xs font-medium bg-yellow-500/20 text-yellow-400';
+                document.getElementById('resRiskBadge').textContent = 'Risco Moderado';
             } else {
                 scoreEl.className = 'text-3xl font-bold text-emerald-400';
-                badgeEl.className = 'inline-block mt-2 px-3 py-1 rounded-full text-xs font-medium bg-emerald-500/20 text-emerald-400';
-                badgeEl.textContent = 'Baixo Risco';
+                document.getElementById('resRiskBadge').className = 'inline-block mt-2 px-3 py-1 rounded-full text-xs font-medium bg-emerald-500/20 text-emerald-400';
+                document.getElementById('resRiskBadge').textContent = 'Baixo Risco';
             }
+
+            document.getElementById('resFactorsCount').textContent = riskFactors.length;
+            document.getElementById('resComorbCount').textContent = detectedConditions.length;
+            document.getElementById('res10Year').textContent = risk10Years + '%';
+
+            // Preencher Visão Geral
+            populateOverview(name, age, finalScore, detectedConditions, riskFactors, risk10Years);
             
-            document.getElementById('resLifeExp').textContent = (80 - (riskScore/10)).toFixed(1) + ' anos';
-            document.getElementById('resQOL').textContent = (0.8 - (riskScore/500)).toFixed(2);
-            document.getElementById('resCost').textContent = 'R$ ' + (riskScore * 120).toLocaleString();
+            // Preencher Fatores de Risco detalhados
+            populateRiskFactors(riskFactors);
             
-            // Resumo executivo
-            document.getElementById('executiveSummary').innerHTML = `
-                <p>Paciente <strong>${name}</strong>, ${age} anos, apresenta ${riskScore > 70 ? 'múltiplos fatores de risco cardiovascular' : 'perfil clínico estável'} segundo avaliação algorítmica. 
-                ${hasCardiac ? 'Histórico cardíaco identificado requer monitoramento contínuo.' : ''} 
-                ${hasDiabetes ? 'Controle glicêmico deve ser prioridade terapêutica.' : ''}</p>
-                <p>Probabilidade de evento adverso em 12 meses: <strong>${riskScore}%</strong>. 
-                Recomenda-se ${riskScore > 70 ? 'internação para estabilização e investigação complementar' : 'ambulatório com acompanhamento trimestral'}.</p>
-            `;
+            // Preencher Comorbidades
+            populateComorbidities(detectedConditions);
             
-            // Preenche todas as abas
-            populateOutcomes(riskScore, hasCardiac, hasDiabetes, age);
-            populateTreatments(riskScore, hasCardiac, hasDiabetes);
-            populateAlternatives(riskScore);
-            populateResearch(riskScore, hasCardiac, hasDiabetes);
+            // Preencher Desfechos
+            populateOutcomes(finalScore, detectedConditions);
             
+            // Preencher Tratamentos
+            populateTreatments(detectedConditions, finalScore);
+
             lucide.createIcons();
-            window.scrollTo({top: document.getElementById('resultados').offsetTop, behavior: 'smooth'});
+            window.scrollTo({top: 0, behavior: 'smooth'});
         }
 
-        function populateOutcomes(risk, cardiac, diabetes, age) {
-            // 6 meses
-            document.getElementById('outcomes-6m').innerHTML = `
-                <div class="flex justify-between items-center p-2 rounded bg-slate-800/50">
-                    <span class="text-sm text-slate-300">Estabilidade Clínica</span>
-                    <span class="text-sm font-bold text-emerald-400">${100-risk}%</span>
-                </div>
-                <div class="flex justify-between items-center p-2 rounded bg-slate-800/50">
-                    <span class="text-sm text-slate-300">${cardiac ? 'Evento Cardiovascular' : 'Complicação Aguda'}</span>
-                    <span class="text-sm font-bold text-red-400">${Math.floor(risk*0.6)}%</span>
-                </div>
-            `;
+        function populateOverview(name, age, score, conditions, risks, risk10y) {
+            const summary = document.getElementById('executiveSummary');
+            const mainCondition = conditions[0].name;
+            const riskLevel = score >= 70 ? 'alto' : score >= 40 ? 'moderado' : 'baixo';
             
-            // 12 meses
-            document.getElementById('outcomes-12m').innerHTML = `
-                <div class="flex justify-between items-center p-2 rounded bg-slate-800/50">
-                    <span class="text-sm text-slate-300">Recuperação/Melhora</span>
-                    <span class="text-sm font-bold text-emerald-400">${Math.floor(85-risk/2)}%</span>
-                </div>
-                <div class="flex justify-between items-center p-2 rounded bg-slate-800/50">
-                    <span class="text-sm text-slate-300">Hospitalização</span>
-                    <span class="text-sm font-bold text-yellow-400">${Math.floor(risk*0.4)}%</span>
-                </div>
-                ${risk > 60 ? `
-                <div class="flex justify-between items-center p-2 rounded bg-slate-800/50">
-                    <span class="text-sm text-slate-300">Óbito</span>
-                    <span class="text-sm font-bold text-red-400">${Math.floor(risk*0.1)}%</span>
-                </div>` : ''}
-            `;
-            
-            // 24 meses
-            document.getElementById('outcomes-24m').innerHTML = `
-                <div class="flex justify-between items-center p-2 rounded bg-slate-800/50">
-                    <span class="text-sm text-slate-300">Qualidade de Vida Preservada</span>
-                    <span class="text-sm font-bold text-emerald-400">${Math.floor(75-risk/3)}%</span>
-                </div>
-                <div class="flex justify-between items-center p-2 rounded bg-slate-800/50">
-                    <span class="text-sm text-slate-300">Progressão de Doença Crônica</span>
-                    <span class="text-sm font-bold text-yellow-400">${Math.floor(risk*0.5)}%</span>
-                </div>
-            `;
-            
-            // Cenários
-            document.getElementById('optimistic-scenario').innerHTML = `
-                <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Redução de 40% no risco</li>
-                <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Estabilidade em 3 meses</li>
-                <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Alta adesão terapêutica</li>
-            `;
-            
-            document.getElementById('probable-scenario').innerHTML = `
-                <li class="flex items-center gap-2"><i data-lucide="minus" class="w-4 h-4 text-yellow-400"></i> Redução de 15% no risco</li>
-                <li class="flex items-center gap-2"><i data-lucide="minus" class="w-4 h-4 text-yellow-400"></i> 1-2 episódios agudos/ano</li>
-                <li class="flex items-center gap-2"><i data-lucide="minus" class="w-4 h-4 text-yellow-400"></i> Adesão parcial (60-70%)</li>
-            `;
-            
-            document.getElementById('pessimistic-scenario').innerHTML = `
-                <li class="flex items-center gap-2"><i data-lucide="x" class="w-4 h-4 text-red-400"></i> Progressão da doença base</li>
-                <li class="flex items-center gap-2"><i data-lucide="x" class="w-4 h-4 text-red-400"></i> Múltiplas hospitalizações</li>
-                <li class="flex items-center gap-2"><i data-lucide="x" class="w-4 h-4 text-red-400"></i> Baixa adesão (<40%)</li>
+            summary.innerHTML = `
+                Paciente <strong>${name}</strong>, ${age} anos, apresenta <strong>${riskLevel} risco cardiovascular e metabólico</strong> 
+                (Score: ${score}%). ${conditions.length > 1 ? 'Múltiplas comorbidades identificadas' : 'Condição principal identificada'}: 
+                <strong>${mainCondition}</strong>. 
+                ${risks.length > 0 ? `Detectados ${risks.length} fatores de risco modificáveis.` : 'Nenhum fator de risco adicional identificado.'}
+                Probabilidade de evento adverso em 10 anos: <strong>${risk10y}%</strong>.
+                ${score > 70 ? 'Recomenda-se intervenção imediata e acompanhamento especializado.' : 'Acompanhamento ambulatorial regular recomendado.'}
             `;
         }
 
-        function populateTreatments(risk, cardiac, diabetes) {
-            // 1ª Linha
-            let firstLine = '';
-            if (cardiac) {
-                firstLine = `
-                    <div class="flex items-start gap-4 p-4 rounded-lg bg-slate-800/50 border border-slate-700">
-                        <div class="p-2 rounded bg-cyan-500/20 text-cyan-400"><i data-lucide="pill" class="w-5 h-5"></i></div>
-                        <div class="flex-1">
-                            <h4 class="font-semibold text-white">Antiplaquetário + Estatina</h4>
-                            <p class="text-sm text-slate-400 mt-1">Ácido acetilsalicílico 100mg/dia + Atorvastatina 40mg</p>
-                            <div class="mt-2 flex gap-2">
-                                <span class="text-xs px-2 py-1 rounded bg-emerald-500/10 text-emerald-400">Nível A</span>
-                                <span class="text-xs px-2 py-1 rounded bg-blue-500/10 text-blue-400">Guideline ESC 2024</span>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            } else if (diabetes) {
-                firstLine = `
-                    <div class="flex items-start gap-4 p-4 rounded-lg bg-slate-800/50 border border-slate-700">
-                        <div class="p-2 rounded bg-cyan-500/20 text-cyan-400"><i data-lucide="pill" class="w-5 h-5"></i></div>
-                        <div class="flex-1">
-                            <h4 class="font-semibold text-white">Metformina + IECA</h4>
-                            <p class="text-sm text-slate-400 mt-1">Metformina 850mg 2x/dia + Enalapril 10mg</p>
-                            <div class="mt-2 flex gap-2">
-                                <span class="text-xs px-2 py-1 rounded bg-emerald-500/10 text-emerald-400">Nível A</span>
-                                <span class="text-xs px-2 py-1 rounded bg-blue-500/10 text-blue-400">ADA/EASD 2024</span>
-                            </div>
-                        </div>
-                    </div>
-                `;
+        function populateRiskFactors(risks) {
+            const list = document.getElementById('riskFactorsList');
+            
+            if (risks.length === 0) {
+                list.innerHTML = '<li class="text-slate-500 italic">Nenhum fator de risco adicional identificado além da idade.</li>';
             } else {
-                firstLine = `
-                    <div class="flex items-start gap-4 p-4 rounded-lg bg-slate-800/50 border border-slate-700">
-                        <div class="p-2 rounded bg-cyan-500/20 text-cyan-400"><i data-lucide="activity" class="w-5 h-5"></i></div>
-                        <div class="flex-1">
-                            <h4 class="font-semibold text-white">Modificação de Estilo de Vida</h4>
-                            <p class="text-sm text-slate-400 mt-1">Dieta mediterrânea, 150min exercício/semana, controle de stress</p>
-                            <div class="mt-2 flex gap-2">
-                                <span class="text-xs px-2 py-1 rounded bg-emerald-500/10 text-emerald-400">Nível A</span>
-                                <span class="text-xs px-2 py-1 rounded bg-blue-500/10 text-blue-400">Preventivo</span>
-                            </div>
+                list.innerHTML = risks.map(r => `
+                    <li class="flex items-start gap-3 p-3 rounded-lg bg-slate-800/30 border border-slate-700">
+                        <div class="mt-1">
+                            <i data-lucide="alert-circle" class="w-5 h-5 ${r.impact === 'high' ? 'text-red-400' : 'text-yellow-400'}"></i>
                         </div>
-                    </div>
-                `;
+                        <div>
+                            <h4 class="text-white font-medium">${r.name}</h4>
+                            <p class="text-sm text-slate-400">${r.description}</p>
+                            <span class="inline-block mt-1 text-xs px-2 py-0.5 rounded ${r.impact === 'high' ? 'bg-red-500/20 text-red-400' : 'bg-yellow-500/20 text-yellow-400'}">
+                                Impacto: ${r.impact === 'high' ? 'Alto' : 'Médio'}
+                            </span>
+                        </div>
+                    </li>
+                `).join('');
             }
-            document.getElementById('firstLineTreatments').innerHTML = firstLine;
-            
-            // 2ª Linha
-            document.getElementById('secondLineTreatments').innerHTML = `
-                <div class="p-3 rounded-lg bg-slate-800/30 border-l-4 border-yellow-500">
-                    <h4 class="text-white font-medium">Se intolerância à 1ª linha:</h4>
-                    <p class="text-sm text-slate-400 mt-1">${cardiac ? 'Clopidogrel 75mg em substituição ao AAS' : diabetes ? 'SGLT2-i (Empagliflozina) ou GLP-1 RA' : 'Acompanhamento multidisciplinar intensivo'}</p>
-                </div>
-                <div class="p-3 rounded-lg bg-slate-800/30 border-l-4 border-orange-500">
-                    <h4 class="text-white font-medium">Se falha terapêutica:</h4>
-                    <p class="text-sm text-slate-400 mt-1">${cardiac ? 'Coronariografia + revascularização' : diabetes ? 'Insulinoterapia basal' : 'Investigação complementar especializada'}</p>
-                </div>
-            `;
-            
-            // Cronograma
-            document.getElementById('treatmentTimeline').innerHTML = `
-                <tr class="border-b border-slate-700/50">
-                    <td class="py-3 text-cyan-400 font-medium">Fase Aguda</td>
-                    <td class="py-3 text-slate-300">0-30 dias</td>
-                    <td class="py-3 text-slate-300">${risk > 70 ? 'Internação + estabilização' : 'Ajuste medicamentoso ambulatorial'}</td>
-                    <td class="py-3 text-slate-300">Controle sintomático</td>
-                </tr>
-                <tr class="border-b border-slate-700/50">
-                    <td class="py-3 text-cyan-400 font-medium">Fase de Transição</td>
-                    <td class="py-3 text-slate-300">1-6 meses</td>
-                    <td class="py-3 text-slate-300">Titulação de doses, reabilitação</td>
-                    <td class="py-3 text-slate-300">Otimização terapêutica</td>
-                </tr>
-                <tr>
-                    <td class="py-3 text-cyan-400 font-medium">Manutenção</td>
-                    <td class="py-3 text-slate-300">6+ meses</td>
-                    <td class="py-3 text-slate-300">Seguimento trimestral, exames anuais</td>
-                    <td class="py-3 text-slate-300">Prevenção secundária</td>
-                </tr>
-            `;
-            
-            // Verifica interações (simulação)
-            if (cardiac && diabetes) {
-                document.getElementById('drugInteractions').style.display = 'block';
-                document.getElementById('interactionsList').innerHTML = `
-                    <div class="flex items-start gap-2 text-sm">
-                        <i data-lucide="alert-circle" class="w-4 h-4 text-yellow-400 mt-0.5"></i>
-                        <span class="text-slate-300">Metformina + Contrastes iodados: Risco de acidose lática. Suspender 48h antes de exames com contraste.</span>
+
+            // Análise detalhada na aba de fatores
+            const detailed = document.getElementById('detailedRiskAnalysis');
+            detailed.innerHTML = risks.map((r, i) => `
+                <div class="flex items-center justify-between p-4 rounded-lg bg-slate-800/50 border border-slate-700">
+                    <div class="flex items-center gap-3">
+                        <span class="text-slate-500 font-mono">${i + 1}</span>
+                        <span class="text-white font-medium">${r.name}</span>
                     </div>
-                `;
+                    <div class="flex items-center gap-2">
+                        <div class="w-32 h-2 bg-slate-700 rounded-full overflow-hidden">
+                            <div class="h-full ${r.impact === 'high' ? 'bg-red-500' : 'bg-yellow-500'} rounded-full" style="width: ${r.impact === 'high' ? '90%' : '60%'}"></div>
+                        </div>
+                        <span class="text-xs text-slate-400 w-12 text-right">${r.impact === 'high' ? '9/10' : '6/10'}</span>
+                    </div>
+                </div>
+            `).join('') || '<p class="text-slate-500">Sem fatores adicionais para análise detalhada.</p>';
+        }
+
+        function populateComorbidities(conditions) {
+            const list = document.getElementById('comorbiditiesList');
+            const noComorb = document.getElementById('noComorbidities');
+            
+            if (conditions.length === 0 || (conditions.length === 1 && conditions[0].name === 'Condição Geral')) {
+                list.innerHTML = '';
+                noComorb.classList.remove('hidden');
+            } else {
+                noComorb.classList.add('hidden');
+                list.innerHTML = conditions.map(c => `
+                    <span class="px-4 py-2 rounded-full text-sm font-medium border ${
+                        c.severity === 'high' ? 'bg-red-500/10 text-red-400 border-red-500/20' :
+                        c.severity === 'medium' ? 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20' :
+                        'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                    } flex items-center gap-2">
+                        <i data-lucide="${c.icon}" class="w-4 h-4"></i>
+                        ${c.name}
+                    </span>
+                `).join('');
             }
         }
 
-        function populateAlternatives(risk) {
-            document.getElementById('alternativeTherapies').innerHTML = `
-                <div class="p-4 rounded-lg bg-slate-800/50 border border-slate-700 hover:border-orange-500/50 transition-colors">
-                    <div class="flex items-center gap-2 mb-2">
-                        <i data-lucide="flower-2" class="w-5 h-5 text-orange-400"></i>
-                        <h4 class="font-semibold text-white">Suplementação Ômega-3</h4>
-                    </div>
-                    <p class="text-sm text-slate-400 mb-2">2-4g/dia (EPA+DHA) - Redução de triglicerídeos e eventos cardiovasculares</p>
-                    <span class="text-xs px-2 py-1 rounded bg-orange-500/10 text-orange-400">Evidência: Moderada (REDUCE-IT)</span>
-                </div>
-                
-                <div class="p-4 rounded-lg bg-slate-800/50 border border-slate-700 hover:border-orange-500/50 transition-colors">
-                    <div class="flex items-center gap-2 mb-2">
-                        <i data-lucide="wind" class="w-5 h-5 text-orange-400"></i>
-                        <h4 class="font-semibold text-white">Respiração Guiada / Meditação</h4>
-                    </div>
-                    <p class="text-sm text-slate-400 mb-2">20min/dia - Redução da PA e cortisol</p>
-                    <span class="text-xs px-2 py-1 rounded bg-orange-500/10 text-orange-400">Evidência: Moderada</span>
-                </div>
-                
-                <div class="p-4 rounded-lg bg-slate-800/50 border border-slate-700 hover:border-orange-500/50 transition-colors">
-                    <div class="flex items-center gap-2 mb-2">
-                        <i data-lucide="thermometer" class="w-5 h-5 text-orange-400"></i>
-                        <h4 class="font-semibold text-white">Terapia de Calor/Frio</h4>
-                    </div>
-                    <p class="text-sm text-slate-400 mb-2">Sauna 15min 3x/semana - Redução risco vascular</p>
-                    <span class="text-xs px-2 py-1 rounded bg-orange-500/10 text-orange-400">Evidência: Emergente</span>
-                </div>
-                
-                <div class="p-4 rounded-lg bg-slate-800/50 border border-slate-700 hover:border-orange-500/50 transition-colors">
-                    <div class="flex items-center gap-2 mb-2">
-                        <i data-lucide="coffee" class="w-5 h-5 text-orange-400"></i>
-                        <h4 class="font-semibold text-white">Jeito Intermitente 16:8</h4>
-                    </div>
-                    <p class="text-sm text-slate-400 mb-2">Restrição calórica temporal - Melhora sensibilidade à insulina</p>
-                    <span class="text-xs px-2 py-1 rounded bg-orange-500/10 text-orange-400">Evidência: Moderada</span>
-                </div>
-            `;
+        function populateOutcomes(score, conditions) {
+            const hasCardiac = conditions.some(c => c.name.includes('Cardiovascular'));
+            const hasDiabetes = conditions.some(c => c.name.includes('Metabólica'));
             
-            // Prescrição de lifestyle
-            document.getElementById('lifestylePrescription').innerHTML = `
-                <div class="p-4 rounded-lg bg-slate-800/30 border-l-4 border-emerald-500">
-                    <h4 class="font-semibold text-emerald-400 mb-2">Prescrição Alimentar</h4>
-                    <ul class="text-sm text-slate-300 space-y-1">
-                        <li>• Dieta Mediterrânea ou DASH</li>
-                        <li>• Eliminar ultra-processados</li>
-                        <li>• 30g de fibras/dia</li>
-                        <li>• <2g de sódio/dia</li>
-                    </ul>
-                </div>
-                <div class="p-4 rounded-lg bg-slate-800/30 border-l-4 border-blue-500">
-                    <h4 class="font-semibold text-blue-400 mb-2">Prescrição de Exercício</h4>
-                    <ul class="text-sm text-slate-300 space-y-1">
-                        <li>• Aeróbico: 150min/semana (moderado)</li>
-                        <li>• Resistência: 2x/semana</li>
-                        <li>• Redução do tempo sentado</li>
-                        <li>• Monitorização de FC</li>
-                    </ul>
-                </div>
-                <div class="p-4 rounded-lg bg-slate-800/30 border-l-4 border-purple-500">
-                    <h4 class="font-semibold text-purple-400 mb-2">Higiene do Sono</h4>
-                    <ul class="text-sm text-slate-300 space-y-1">
-                        <li>• 7-9 horas/noite</li>
-                        <li>• Horários regulares</li>
-                        <li>• Tratamento de SAOS se presente</li>
-                    </ul>
-                </div>
-                <div class="p-4 rounded-lg bg-slate-800/30 border-l-4 border-yellow-500">
-                    <h4 class="font-semibold text-yellow-400 mb-2">Cessação Tabágica</h4>
-                    <ul class="text-sm text-slate-300 space-y-1">
-                        <li>• Abordagem 5A/5R</li>
-                        <li>• Considerar Bupropiona ou Varenicilina</li>
-                        <li>• Acompanhamento psicológico</li>
-                    </ul>
-                </div>
-            `;
-        }
+            const outcomes = [
+                {
+                    title: hasCardiac ? 'Evento Cardiovascular Agudo (IAM/AVC)' : 'Internação Hospitalar',
+                    prob: Math.min(Math.floor(score * 0.8), 95),
+                    color: 'red',
+                    time: 'Próximos 12 meses'
+                },
+                {
+                    title: 'Progressão da Doença Base',
+                    prob: Math.min(Math.floor(score * 0.6), 80),
+                    color: 'yellow',
+                    time: '24 meses'
+                },
+                {
+                    title: 'Estabilidade com Tratamento Adequado',
+                    prob: Math.max(100 - Math.floor(score * 0.9), 20),
+                    color: 'emerald',
+                    time: 'Com adesão terapêutica'
+                }
+            ];
 
-        function populateResearch(risk, cardiac, diabetes) {
-            const trials = [];
-            
-            if (cardiac) {
-                trials.push({
-                    title: 'ORION-8: Inclisiran em Doença Cardiovascular',
-                    phase: 'Fase III',
-                    description: 'RNA terapêutico de ação prolongada (2x/ano) para redução de LDL',
-                    location: 'Multi-centro Brasil'
-                });
-                trials.push({
-                    title: 'COLCOT: Colchicina pós-infarto',
-                    phase: 'Fase IV',
-                    description: 'Anti-inflamatório para prevenção secundária',
-                    location: 'Hospitais universitários'
-                });
-            }
-            
-            if (diabetes) {
-                trials.push({
-                    title: 'REMOVAL: Metformina Tipo 1',
-                    phase: 'Fase III',
-                    description: 'Uso de metformina em diabéticos tipo 1 com sobrepeso',
-                    location: 'Endocrinologia Avançada SP'
-                });
-                trials.push({
-                    title: 'SURPASS-CVOT: Tirzepatide',
-                    phase: 'Fase III',
-                    description: 'Dual GIP/GLP-1 agonista - Superioridade cardiovascular',
-                    location: 'Multi-centro global'
-                });
-            }
-            
-            if (trials.length === 0) {
-                trials.push({
-                    title: 'PREVENT: Aspirina Primária',
-                    phase: 'Fase IV',
-                    description: 'Reavaliação do uso de AAS em prevenção primária',
-                    location: 'Rede pública SUS'
-                });
-            }
-            
-            document.getElementById('clinicalTrials').innerHTML = trials.map(t => `
-                <div class="p-4 rounded-lg bg-slate-800/50 border border-slate-700 hover:border-purple-500/50 transition-all cursor-pointer group">
+            document.getElementById('outcomesList').innerHTML = outcomes.map(o => `
+                <div class="p-4 rounded-lg bg-slate-800/30 border border-slate-700">
                     <div class="flex justify-between items-start mb-2">
-                        <h4 class="font-semibold text-white group-hover:text-purple-400 transition-colors">${t.title}</h4>
-                        <span class="px-2 py-1 rounded bg-purple-500/20 text-purple-400 text-xs">${t.phase}</span>
+                        <div>
+                            <h4 class="text-white font-medium">${o.title}</h4>
+                            <p class="text-xs text-slate-500">${o.time}</p>
+                        </div>
+                        <span class="text-2xl font-bold text-${o.color}-400">${o.prob}%</span>
                     </div>
-                    <p class="text-sm text-slate-400 mb-2">${t.description}</p>
-                    <div class="flex items-center gap-2 text-xs text-slate-500">
-                        <i data-lucide="map-pin" class="w-3 h-3"></i>
-                        <span>${t.location}</span>
+                    <div class="w-full h-3 bg-slate-700 rounded-full overflow-hidden">
+                        <div class="h-full bg-${o.color}-500 rounded-full transition-all duration-1000" style="width: ${o.prob}%"></div>
                     </div>
                 </div>
             `).join('');
-            
-            // Medicina de precisão
-            document.getElementById('precisionMedicine').innerHTML = `
-                <div class="p-4 rounded-lg bg-slate-800/30 border border-slate-700">
-                    <h4 class="text-white font-medium mb-2">Farmacogenômica Sugerida</h4>
-                    <ul class="text-sm text-slate-400 space-y-1">
-                        <li>• CYP2C19 (Clopidogrel) - Se uso de antiplaquetário</li>
-                        <li>• SLCO1B1 (Estatinas) - Risco de miopatia</li>
-                        <li>• CYP2D6 (Beta-bloqueadores) - Metabolização</li>
-                    </ul>
-                </div>
-                <div class="p-4 rounded-lg bg-slate-800/30 border border-slate-700">
-                    <h4 class="text-white font-medium mb-2">Biomarcadores em Monitoramento</h4>
-                    <ul class="text-sm text-slate-400 space-y-1">
-                        <li>• Troponina de alta sensibilidade</li>
-                        <li>• BNP/NT-proBNP</li>
-                        <li>• PCR-ultrasensível</li>
-                    </ul>
-                </div>
-            `;
-            
-            // Tecnologias emergentes
-            document.getElementById('emergingTech').innerHTML = `
-                <div class="p-4 rounded-lg bg-slate-800/50 border border-slate-700 text-center">
-                    <i data-lucide="cpu" class="w-8 h-8 text-cyan-400 mx-auto mb-2"></i>
-                    <h4 class="font-semibold text-white text-sm">IA Preditiva Contínua</h4>
-                    <p class="text-xs text-slate-400 mt-1">Monitoramento em tempo real via wearables</p>
-                </div>
-                <div class="p-4 rounded-lg bg-slate-800/50 border border-slate-700 text-center">
-                    <i data-lucide="smartphone" class="w-8 h-8 text-cyan-400 mx-auto mb-2"></i>
-                    <h4 class="font-semibold text-white text-sm">Telemedicina 5G</h4>
-                    <p class="text-xs text-slate-400 mt-1">Consultas holográficas e exames remotos</p>
-                </div>
-                <div class="p-4 rounded-lg bg-slate-800/50 border border-slate-700 text-center">
-                    <i data-lucide="git-branch" class="w-8 h-8 text-cyan-400 mx-auto mb-2"></i>
-                    <h4 class="font-semibold text-white text-sm">Edição Gênica (CRISPR)</h4>
-                    <p class="text-xs text-slate-400 mt-1">Terapia gênica para hipercolesterolemia familiar</p>
-                </div>
-            `;
         }
 
-        // Navegação das abas de resultado
-        function showResultTab(tabId) {
-            // Esconde todos os conteúdos
-            document.querySelectorAll('.result-content').forEach(c => c.classList.add('hidden'));
-            document.getElementById('content-' + tabId).classList.remove('hidden');
+        function populateTreatments(conditions, score) {
+            const hasCardiac = conditions.some(c => c.name.includes('Cardiovascular'));
+            const hasDiabetes = conditions.some(c => c.name.includes('Metabólica'));
+            const hasRenal = conditions.some(c => c.name.includes('Renal'));
             
-            // Atualiza classes das abas
-            document.querySelectorAll('.tab-btn').forEach(b => {
-                b.classList.remove('text-cyan-400', 'border-b-2', 'border-cyan-400');
-                b.classList.add('text-slate-400');
-            });
-            document.getElementById('tab-' + tabId).classList.remove('text-slate-400');
-            document.getElementById('tab-' + tabId).classList.add('text-cyan-400', 'border-b-2', 'border-cyan-400');
+            let protocol = '';
             
-            // Renderiza gráfico se for a aba de desfechos
-            if (tabId === 'desfechos' && !window.outcomesChartInstance) {
-                setTimeout(() => {
-                    const ctx = document.getElementById('outcomesChart').getContext('2d');
-                    window.outcomesChartInstance = new Chart(ctx, {
-                        type: 'line',
-                        data: {
-                            labels: ['0m', '3m', '6m', '12m', '18m', '24m'],
-                            datasets: [{
-                                label: 'Sobrevida Livre de Evento',
-                                data: [100, 92, 85, 78, 72, 68],
-                                borderColor: '#10b981',
-                                backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                                tension: 0.4
-                            }, {
-                                label: 'Qualidade de Vida (EQ-5D)',
-                                data: [0.9, 0.85, 0.82, 0.78, 0.75, 0.73],
-                                borderColor: '#06b6d4',
-                                backgroundColor: 'rgba(6, 182, 212, 0.1)',
-                                yAxisID: 'y1',
-                                tension: 0.4
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            interaction: { intersect: false, mode: 'index' },
-                            scales: {
-                                y: { beginAtZero: true, max: 100, grid: { color: '#334155' }, ticks: { color: '#94a3b8' } },
-                                y1: { position: 'right', min: 0, max: 1, grid: { drawOnChartArea: false }, ticks: { color: '#94a3b8' } },
-                                x: { grid: { color: '#334155' }, ticks: { color: '#94a3b8' } }
-                            },
-                            plugins: {
-                                legend: { labels: { color: '#e2e8f0' } }
-                            }
-                        }
-                    });
-                }, 100);
-            }
-        }
-
-        // Calculadoras
-        function calculateScore(type) {
-            document.getElementById('calcModal').classList.remove('hidden');
-            const title = document.getElementById('calcTitle');
-            const content = document.getElementById('calcContent');
-            
-            if (type === 'framingham') {
-                title.textContent = 'Framingham Risk Score';
-                content.innerHTML = `
-                    <div class="grid grid-cols-2 gap-4">
-                        <div><label class="text-sm text-slate-400">Idade</label><input type="number" id="calcAge" class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-white"></div>
-                        <div><label class="text-sm text-slate-400">Colesterol Total</label><input type="number" id="calcCol" class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-white"></div>
-                        <div><label class="text-sm text-slate-400">HDL</label><input type="number" id="calcHDL" class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-white"></div>
-                        <div><label class="text-sm text-slate-400">PAS (mmHg)</label><input type="number" id="calcPAS" class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-white"></div>
+            if (hasCardiac) {
+                protocol = `
+                    <div class="flex items-start gap-4 p-4 rounded-lg bg-slate-800/50 border border-cyan-500/30">
+                        <div class="p-2 rounded bg-cyan-500/20 text-cyan-400"><i data-lucide="pill" class="w-5 h-5"></i></div>
+                        <div>
+                            <h4 class="font-semibold text-white">1ª Linha Cardiovascular</h4>
+                            <ul class="text-sm text-slate-300 mt-2 space-y-1">
+                                <li>• AAS 100mg/dia ou Clopidogrel 75mg (se intolerante)</li>
+                                <li>• Atorvastatina 40-80mg (LDL alvo <70)</li>
+                                <li>• IECA ou ARA II (proteção renal/cardíaca)</li>
+                                <li>• Betabloqueador (se disfunção VE ou arritmia)</li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="flex gap-4 mt-2">
-                        <label class="flex items-center gap-2 text-slate-300"><input type="checkbox" id="calcFumante" class="rounded bg-slate-800 border-slate-700"> Fumante</label>
-                        <label class="flex items-center gap-2 text-slate-300"><input type="checkbox" id="calcTratado" class="rounded bg-slate-800 border-slate-700"> PA tratada</label>
+                `;
+            } else if (hasDiabetes) {
+                protocol = `
+                    <div class="flex items-start gap-4 p-4 rounded-lg bg-slate-800/50 border border-cyan-500/30">
+                        <div class="p-2 rounded bg-cyan-500/20 text-cyan-400"><i data-lucide="activity" class="w-5 h-5"></i></div>
+                        <div>
+                            <h4 class="font-semibold text-white">1ª Linha Diabetes</h4>
+                            <ul class="text-sm text-slate-300 mt-2 space-y-1">
+                                <li>• Metformina 850mg 2x/dia (titular gradual)</li>
+                                <li>• IECA ou ARA II (se albuminúria ou HTA)</li>
+                                <li>• Estatina (se >40 anos ou risco CV)</li>
+                                <li>• SGLT2-i ou GLP-1 RA (se risco CV alto)</li>
+                            </ul>
+                        </div>
+                    </div>
+                `;
+            } else {
+                protocol = `
+                    <div class="flex items-start gap-4 p-4 rounded-lg bg-slate-800/50 border border-cyan-500/30">
+                        <div class="p-2 rounded bg-cyan-500/20 text-cyan-400"><i data-lucide="shield" class="w-5 h-5"></i></div>
+                        <div>
+                            <h4 class="font-semibold text-white">Prevenção Primária</h4>
+                            <ul class="text-sm text-slate-300 mt-2 space-y-1">
+                                <li>• Modificação intensiva de estilo de vida</li>
+                                <li>• Controle rigoroso de FAT (PA, glicose, lipídios)</li>
+                                <li>• Acompanhamento trimestral</li>
+                            </ul>
+                        </div>
                     </div>
                 `;
             }
+
+            document.getElementById('treatmentProtocol').innerHTML = protocol;
+
+            // Recomendações complementares
+            const recs = [
+                'Monitorização domiciliar de PA (2x ao dia, braço direito)',
+                'Avaliação laboratorial em 30 dias: HbA1c, Lipidograma, Função Renal',
+                'Consulta de retorno em ' + (score > 70 ? '7 dias' : '30 dias'),
+                hasRenal ? 'Restrição de sódio <2g/dia e proteína 0,8g/kg' : 'Dieta mediterrânea',
+                'Atividade física: 150 min/semana moderada (após liberação)'
+            ];
+
+            document.getElementById('complementaryRecs').innerHTML = recs.map(r => `
+                <li class="flex items-start gap-2">
+                    <i data-lucide="check-circle" class="w-5 h-5 text-cyan-400 mt-0.5"></i>
+                    <span>${r}</span>
+                </li>
+            `).join('');
         }
 
-        function closeCalc() {
-            document.getElementById('calcModal').classList.add('hidden');
+        function showTab(tabName) {
+            // Esconde todos
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+            document.querySelectorAll('[id^="tab-"]').forEach(t => {
+                t.classList.remove('text-cyan-400', 'border-b-2', 'border-cyan-400');
+                t.classList.add('text-slate-400');
+            });
+            
+            // Mostra o selecionado
+            document.getElementById('content-' + tabName).classList.remove('hidden');
+            const btn = document.getElementById('tab-' + tabName);
+            btn.classList.remove('text-slate-400');
+            btn.classList.add('text-cyan-400', 'border-b-2', 'border-cyan-400');
+            
+            lucide.createIcons();
         }
 
-        function calculate() {
-            // Simulação de cálculo
-            const result = document.getElementById('calcResult');
-            result.classList.remove('hidden');
-            result.innerHTML = `
-                <div class="text-center">
-                    <p class="text-slate-400 text-sm">Risco em 10 anos:</p>
-                    <p class="text-3xl font-bold text-red-400 my-2">15.4%</p>
-                    <p class="text-xs text-slate-500">Risco intermediário - Recomendação: Modificação de risco + considerar estatina</p>
-                </div>
-            `;
-        }
-
-        // Funções extras
-        function exportReport() {
-            alert('Gerando PDF do relatório completo...\n(Inclui: Análise, Desfechos, Tratamentos e Pesquisas)');
-        }
-
-        function shareCase() {
-            const url = window.location.href + '?case=' + Math.random().toString(36).substring(7);
-            prompt('Link para compartilhar este caso (válido por 7 dias):', url);
-        }
-
-        function scheduleFollowup() {
-            alert('Agendamento sugerido:\n- Retorno em 30 dias\n- Exames: Hemograma, Função Renal, Lipidograma\n- Especialidade: ' + (document.getElementById('clinicalHistory').value.toLowerCase().includes('cardíaco') ? 'Cardiologia' : 'Clínica Geral'));
-        }
-
-        function filterResearch() {
-            alert('Filtros disponíveis:\n- Fase I, II, III, IV\n- Recrutando\n- Bioequivalência\n- Estudos observacionais');
+        function newAnalysis() {
+            document.getElementById('resultados').classList.add('hidden');
+            document.getElementById('inputSection').classList.remove('hidden');
+            document.getElementById('patientName').value = '';
+            document.getElementById('clinicalHistory').value = '';
+            document.getElementById('recentExams').value = '';
+            window.scrollTo(0, 0);
         }
     </script>
 </body>
